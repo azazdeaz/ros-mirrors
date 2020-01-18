@@ -1,5 +1,7 @@
-import {requireWithSource} from './requireWithSource'
+import { requireWithSource } from './requireWithSource'
 console.log('ad')
-const res = requireWithSource('./test.ts')
-
-
+requireWithSource('./test.ts').then(res => {
+  console.log(res)
+  // @ts-ignore
+  res.test()
+})
