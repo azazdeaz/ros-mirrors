@@ -5,3 +5,5 @@ export function test(): void {
 export function test2(): void {
   console.log('this is a test2!')
 }
+
+console.log('im running3')

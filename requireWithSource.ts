@@ -9,16 +9,25 @@ const wrap = (src: string) => `(() => {
   return exports
 })()`
 
+const extensions = ['.js', '.ts', '.tsx']
+
 export async function requireWithSource(path: string): Promise<any> {
-  path = await promisify(resolve)(path, { basedir: __dirname })
+  path = await promisify(resolve)(path, { basedir: __dirname, extensions })
   const source = await promisify(readFile)(path, 'utf8')
   let tsout = ts.transpileModule(source, {
     compilerOptions: { module: ts.ModuleKind.CommonJS }
   })
   const js = wrap(tsout.outputText)
   const m = eval(js) as any
-  console.log('ts', source)
-  console.log('js', js)
-  console.log('module', m)
   return m
+}
+
+export async function requireWithSourceNoEval(path: string): Promise<any> {
+  path = await promisify(resolve)(path, { basedir: __dirname, extensions })
+  const source = await promisify(readFile)(path, 'utf8')
+  let tsout = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS }
+  })
+  const js = wrap(tsout.outputText)
+  return { source, js }
 }
