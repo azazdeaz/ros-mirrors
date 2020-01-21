@@ -1,6 +1,6 @@
 // import * as http from 'http'
 import { transpile } from './requireWithSource'
-import { Server } from './heiss/lib/server/server'
+import { Server } from 'heiss/lib/server/server'
 import route from 'koa-route'
 
 const html = (src: string) => `<!DOCTYPE html>
@@ -12,7 +12,7 @@ const html = (src: string) => `<!DOCTYPE html>
     <script type="module" src="${src}.js"></script>
   </head>
   <body>
-    halihoheyhó
+    halihoheyhó+
   </body>
 </html>`
 
@@ -54,8 +54,8 @@ export function createWebPort({ main }: Options) {
   const server = new Server({
     host: 'localhost',
     port: 8080,
-    directory: './src'
-    transpiler: transpile
+    directory: 'lib'
+    // transpiler: transpile
   })
   console.log('ROUTE', server.app.use)
   server.app.use(

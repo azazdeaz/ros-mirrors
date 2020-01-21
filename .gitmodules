@@ -1,0 +1,3 @@
+[submodule "packages/heiss"]
+	path = packages/heiss
+	url = git@github.com:azazdeaz/heiss.git
