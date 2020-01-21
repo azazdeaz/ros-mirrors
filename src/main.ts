@@ -1,6 +1,6 @@
 import { requireWithSource } from './requireWithSource'
 import { createWebPort } from './createWebPort'
-console.log('ad')
+
 requireWithSource('./test.ts').then(res => {
   console.log(res)
   // @ts-ignore
@@ -8,3 +8,5 @@ requireWithSource('./test.ts').then(res => {
 })
 
 createWebPort({ main: './test'})
+
+

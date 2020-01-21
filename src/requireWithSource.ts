@@ -31,3 +31,10 @@ export async function requireWithSourceNoEval(path: string): Promise<any> {
   const js = wrap(tsout.outputText)
   return { source, js }
 }
+
+export function transpile(tsSource: string) {
+  let tsout = ts.transpileModule(tsSource, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS }
+  })
+  const js = wrap(tsout.outputText)
+}
