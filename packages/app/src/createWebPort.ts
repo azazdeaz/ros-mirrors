@@ -1,5 +1,5 @@
 // import * as http from 'http'
-import { transpile } from './requireWithSource'
+import { transpile, resolvePath } from './requireWithSource'
 import { Server } from 'heiss/lib/server/server'
 import route from 'koa-route'
 
@@ -8,8 +8,7 @@ const html = (src: string) => `<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <title>title</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="${src}.js"></script>
+    <script type="module" src="${src}.ts"></script>
   </head>
   <body>
     halihoheyhó+
@@ -54,13 +53,18 @@ export function createWebPort({ main }: Options) {
   const server = new Server({
     host: 'localhost',
     port: 8080,
-    directory: 'lib'
-    // transpiler: transpile
+    directory: 'src',
+    transpiler: ({ content, path }) => {
+      if (path.endsWith('.ts') || path.endsWith('.tsx')) {
+        return transpile(content)
+      }
+      return content
+    },
+    resolvePath,
   })
-  console.log('ROUTE', server.app.use)
   server.app.use(
     // @ts-ignore
-    route.get('/', (ctx) => {
+    route.get('/', ctx => {
       ctx.body = html(main)
     })
   )

@@ -11,6 +11,14 @@ const wrap = (src: string) => `(() => {
 
 const extensions = ['.js', '.ts', '.tsx']
 
+export async function resolvePath(path: string): Promise<string> {
+  path = path = '../'+ path
+  const filePath = await promisify(resolve)(path, { basedir: __dirname, extensions })
+    .catch((err: Error) => console.log(err))
+  console.log({path, filePath})
+  return filePath || path
+}
+
 export async function requireWithSource(path: string): Promise<any> {
   path = await promisify(resolve)(path, { basedir: __dirname, extensions })
   const source = await promisify(readFile)(path, 'utf8')
@@ -34,7 +42,7 @@ export async function requireWithSourceNoEval(path: string): Promise<any> {
 
 export function transpile(tsSource: string) {
   let tsout = ts.transpileModule(tsSource, {
-    compilerOptions: { module: ts.ModuleKind.CommonJS }
+    compilerOptions: { module: ts.ModuleKind.ESNext }
   })
-  const js = wrap(tsout.outputText)
+  return tsout.outputText
 }

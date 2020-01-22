@@ -1,9 +1,4 @@
-export function test(): void {
-  console.log('this is a test!')
-}
-
-export function test2(): void {
-  console.log('this is a test2!!')
-}
-
-console.log('im running5')
+import { test } from './test2'
+const x: number = 9
+console.log(x)
+test()
