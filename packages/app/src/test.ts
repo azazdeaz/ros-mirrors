@@ -1,10 +1,13 @@
-import { test } from './test2'
+// @ts-ignore
+import { test } from './test2.ts'
+// @ts-ignore
+import { hot } from '/@hmr/api'
 const x: number = 9
-console.log(x*2)
+console.log(x*4)
 test()
 
 // @ts-ignore
-console.log($our$)
-// @ts-ignore
-window['test$our$'] = $our$ 
-//test
+hot(import.meta.url).accept(['./test2.ts'], () => {
+  console.log('accept update')
+  test()
+})
