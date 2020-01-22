@@ -1,4 +1,3 @@
-import { requireWithSource } from './requireWithSource'
 import { createWebPort } from './createWebPort'
 
 // requireWithSource('./test.ts').then(res => {

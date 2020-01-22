@@ -60,7 +60,7 @@ export function createWebPort({ main }: Options) {
       }
       return content
     },
-    resolvePath,
+    pathResolver: resolvePath,
   })
   server.app.use(
     // @ts-ignore
