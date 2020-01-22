@@ -2,6 +2,8 @@
 import { transpile, resolvePath } from './requireWithSource'
 import { Server } from 'heiss/lib/server/server'
 import route from 'koa-route'
+import path from 'path'
+import fs from 'fs'
 
 const html = (src: string) => `<!DOCTYPE html>
 <html lang="en">
@@ -49,6 +51,33 @@ type Options = {
 //   })
 // }
 
+function isUnderSrc(filePath: string) {
+  console.log({filePath})
+  const relative = path.relative(__dirname, path.dirname(filePath))
+  console.log({relative, filePath, __dirname})
+  return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative))
+}
+
+function wsMessageHandler(message: any) {
+  message = JSON.parse(message)
+  console.log('message', message)
+  console.log(message.path)
+  if (
+    typeof message !== 'object' ||
+    message.type !== 'update' ||
+    typeof message.path !== 'string' ||
+    typeof message.content !== 'string'
+  ) {
+    return
+  }
+  if (!isUnderSrc(message.path)) {
+    throw new Error('file path is not under src')
+  }
+  console.log('write file')
+  fs.writeFileSync(message.path, message.content)
+  console.log('file written')
+}
+
 export function createWebPort({ main }: Options) {
   const server = new Server({
     host: 'localhost',
@@ -56,17 +85,18 @@ export function createWebPort({ main }: Options) {
     directory: 'src',
     transpiler: ({ content, path }) => {
       if (path.endsWith('.ts') || path.endsWith('.tsx')) {
-        return transpile(content)
+        return transpile(content, path)
       }
       return content
     },
     pathResolver: resolvePath,
+    wsMessageHandler,
   })
   server.app.use(
     // @ts-ignore
     route.get('/', ctx => {
       ctx.body = html(main)
-    })
+    }),
   )
 
   server.start()
