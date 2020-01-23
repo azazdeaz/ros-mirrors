@@ -15,17 +15,25 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "start": "ts-node src/main.ts",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
     "heiss": "^0.2.2",
     "koa-route": "^3.2.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "resolve": "^1.14.2",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5"
   },
   "devDependencies": {
     "@types/koa-route": "^3.2.4",
-    "@types/resolve": "^1.14.0"
+    "@types/react": "^16.9.18",
+    "@types/react-dom": "^16.9.5",
+    "@types/resolve": "^1.14.0",
+    "acorn": "^7.1.0",
+    "acorn-dynamic-import": "^4.0.0",
+    "acorn-import-meta": "^1.0.0"
   }
 }

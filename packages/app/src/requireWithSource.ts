@@ -28,7 +28,7 @@ export async function resolvePath(path: string): Promise<string> {
 
 export function transpile(tsSource: string, path: string) {
   let tsout = ts.transpileModule(tsSource, {
-    compilerOptions: { module: ts.ModuleKind.ESNext }
+    compilerOptions: { module: ts.ModuleKind.ESNext, jsx: ts.JsxEmit.React, target: ts.ScriptTarget.ES2020 }
   })
   return wrapWith$our$(tsout.outputText, tsSource, path)
 }

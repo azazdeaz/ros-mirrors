@@ -1,6 +1,6 @@
 // import * as http from 'http'
 import { transpile, resolvePath } from './requireWithSource'
-import { Server } from 'heiss/lib/server/server'
+import { Server } from '../node_modules/heiss/lib/server/server'
 import route from 'koa-route'
 import path from 'path'
 import fs from 'fs'
@@ -10,7 +10,7 @@ const html = (src: string) => `<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <title>title</title>
-    <script type="module" src="${src}.ts"></script>
+    <script type="module" src="${src}.tsx"></script>
   </head>
   <body>
     halihoheyhó+
@@ -52,6 +52,7 @@ type Options = {
 // }
 
 function isUnderSrc(filePath: string) {
+  return true
   console.log({filePath})
   const relative = path.relative(__dirname, path.dirname(filePath))
   console.log({relative, filePath, __dirname})
