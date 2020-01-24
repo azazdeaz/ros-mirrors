@@ -1,4 +1,5 @@
 import { createWebPort } from './createWebPort'
+import {join} from 'path'
 
 // requireWithSource('./test.ts').then(res => {
 //   console.log(res)
@@ -6,6 +7,6 @@ import { createWebPort } from './createWebPort'
 //   res.test()
 // })
 
-createWebPort({ main: './test'})
+createWebPort({ main: './src/test', basedir: join(__dirname, '..')})
 
 

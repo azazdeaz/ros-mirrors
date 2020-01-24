@@ -1,14 +1,16 @@
-// @ts-ignore
-import { test } from './test2.ts'
+import { test } from './test2'
 // @ts-ignore
 import { hot } from '/@hmr/api'
-import { React, ReactDOM, ReactIs, PropTypes } from 'https://unpkg.com/es-react@16.12.0/index.js?module'
-import { Comp } from './testcomp.tsx'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Comp } from './testcomp'
+import 'react'
 
 ReactDOM.render(
  <div>aaa<Comp/></div>,
   // React.createElement("h1", {}, "Hello from es-react"),
-
+  
+  // @ts-ignore
   document.body,
 )
 
@@ -20,7 +22,7 @@ console.log(x*4)
 test()
 
 // @ts-ignore
-hot(import.meta.url).accept(['./test2.ts', './testcomp.tsx'], () => {
+hot(import.meta.url).accept(['./test2', './testcomp.tsx'], () => {
   console.log('accept update')
   ReactDOM.render(
     <div>
@@ -28,7 +30,7 @@ hot(import.meta.url).accept(['./test2.ts', './testcomp.tsx'], () => {
       <Comp />
     </div>,
     // React.createElement("h1", {}, "Hello from es-react"),
-
+    // @ts-ignore
     document.body,
   )
 })
