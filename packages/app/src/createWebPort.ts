@@ -1,7 +1,6 @@
 import { Server } from '../node_modules/heiss/lib/server/server'
 import route from 'koa-route'
 import path from 'path'
-import { transform } from '@babel/core'
 import fs from 'fs-extra'
 import { promisify } from 'util'
 const resolve = require('resolve')
@@ -36,23 +35,11 @@ export const createPathResolver = (basedir: string) => async (
 const rxBareImport = /import\s+(.*)(['"])(\w.*)(['"])/
 
 async function convertBareImports(source: string, filePath: string) {
-  return (await Promise.all(source
+  return source
     .split('\n')
-    .map(line => {
-      const match = line.match(rxBareImport)
-      if (!match) {
-        return line
-      }
-      const moduleName = match[3]
-
-      const pwd = path.dirname(filePath)
-      return createPathResolver(pwd)(moduleName)
-        .then(modulePath => {
-          const relativePath = path.relative(pwd, modulePath)
-          return line.replace(rxBareImport, `import $1$2${relativePath}$4`)
-        })
-
-    })))
+    .map(line =>
+      line.replace(rxBareImport, `import $1$2https://dev.jspm.io/$3$4`),
+    )
     .join('\n')
 }
 
@@ -71,41 +58,12 @@ export async function transpile(source: string, path: string) {
 
     result = tsout.outputText
   }
-  
-  console.log('path', path)
-  if (path.includes('/node_modules/')) {
-    console.log('conver to es6', path)
-    result = await cjs2es6(result)
-    console.log('result')
-  }
 
   result = await convertBareImports(result, path)
   result = wrapWith$our$(result, source, path)
 
   return result
 }
-
-const cjs2es6 = (source: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    transform(
-      source,
-      {
-        plugins: [
-          'transform-commonjs-es2015-modules',
-          'transform-node-env-inline',
-          'conditional-compile',
-        ],
-      },
-      function(err, result) {
-        if (err) {
-          return reject(err)
-        }
-        resolve(result?.code || '')
-      },
-    )
-  })
-}
-
 const html = (src: string) => `<!DOCTYPE html>
 <html lang="en">
   <head>
