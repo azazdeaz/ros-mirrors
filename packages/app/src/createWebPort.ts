@@ -1,6 +1,6 @@
 import { Server } from '../node_modules/heiss/lib/server/server'
 import route from 'koa-route'
-import path from 'path'
+import { dirname, relative } from 'path'
 import fs from 'fs-extra'
 import { promisify } from 'util'
 const resolve = require('resolve')
@@ -32,15 +32,41 @@ export const createPathResolver = (basedir: string) => async (
   return filePath || path
 }
 
-const rxBareImport = /import\s+(.*)(['"])(\w.*)(['"])/
+const rxImport = /import\s+(.*)(['"])(.*)(['"])/
+const rxNotBareImport = /^(\/|\.\/|\.\.\/)/
 
-async function convertBareImports(source: string, filePath: string) {
-  return source
-    .split('\n')
-    .map(line =>
-      line.replace(rxBareImport, `import $1$2https://dev.jspm.io/$3$4`),
+function prefDotSlash(path: string) {
+  return /^(\.|\/)/.test(path)
+    ? path
+    : `./${path}`
+}
+
+const isAbsolutePath = (path: string) => path.startsWith('/')
+
+async function convertImports(source: string, filePath: string) {
+  return (
+    await Promise.all(
+      source.split('\n').map(async line => {
+        const match = line.match(rxImport)
+        if (!match) {
+          return line
+        }
+        const [statement, names, ap1, specifier, ap2] = match
+
+        if (isAbsolutePath(specifier)) {
+          return line
+        }
+
+        const es6Path = rxNotBareImport.test(specifier)
+          ? await createPathResolver(dirname(filePath))(specifier)
+              .then(fullPath => prefDotSlash(relative(dirname(filePath), fullPath)))
+              .catch(e => specifier)
+          : `https://dev.jspm.io/${specifier}`
+        console.log(`${specifier} >>>>>>>>>>> ${es6Path}`)
+        return line.replace(statement, `import ${names}${ap1}${es6Path}${ap2}`)
+      }),
     )
-    .join('\n')
+  ).join('\n')
 }
 
 export async function transpile(source: string, path: string) {
@@ -59,7 +85,7 @@ export async function transpile(source: string, path: string) {
     result = tsout.outputText
   }
 
-  result = await convertBareImports(result, path)
+  result = await convertImports(result, path)
   result = wrapWith$our$(result, source, path)
 
   return result
@@ -83,13 +109,12 @@ type Options = {
 
 function isUnderSrc(filePath: string) {
   return true
-  console.log({ filePath })
-  const relative = path.relative(__dirname, path.dirname(filePath))
-  console.log({ relative, filePath, __dirname })
-  return (
-    relative === '' ||
-    (!relative.startsWith('..') && !path.isAbsolute(relative))
-  )
+  // console.log({ filePath })
+  // const relative = relative(__dirname, dirname(filePath))
+  // console.log({ relative, filePath, __dirname })
+  // return (
+  //   relative === '' || (!relative.startsWith('..') && !isAbsolute(relative))
+  // )
 }
 
 async function wsMessageHandler(message: any) {
