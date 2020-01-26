@@ -18,12 +18,17 @@ async function logMessagesFromFooBar() {
   await bag.readMessages({ topics: ['/tf', '/turtle2/pose'] }, result => {
     // topic is the topic the data record was in
     // in this case it will be either '/foo' or '/bar'
+    console.log('----------------------------------')
     console.log(result.topic)
-
+    
+    console.log(result.timestamp)
+    console.log(result.totalChunks)
+    
     // message is the parsed payload
     // this payload will likely differ based on the topic
     console.log(result.message)
+    console.log(result.data)
   })
 }
 
-logMessagesFromFooBar()
+// logMessagesFromFooBar()
