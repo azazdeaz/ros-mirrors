@@ -5,7 +5,7 @@ import fs from 'fs-extra'
 import { promisify } from 'util'
 const resolve = require('resolve')
 import ts from 'typescript'
-import jspmResolve from '@jspm/resolve'
+// import jspmResolve from '@jspm/resolve'
 import { transform } from '@babel/core'
 
 const wrapWith$our$ = (src: string, raw: string, path: string) => `
@@ -193,4 +193,6 @@ export function createWebPort({ main, basedir }: Options) {
   )
 
   server.start()
+
+  return { server } 
 }
