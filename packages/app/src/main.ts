@@ -12,11 +12,13 @@ const { server } = createWebPort({
 // open('./bags/example.bag').then(bag => console.log(bag))
 
 const bagMap: Map<string, Promise<Bag>> = new Map()
-const loadBag = async (filepath: string = './bags/example.bag'): Promise<Bag>  => {
-    if (!bagMap.has(filepath)) {
-        bagMap.set(filepath, open(filepath))
-    }
-    return await bagMap.get(filepath)!
+const loadBag = async (
+  filepath: string = './bags/example.bag',
+): Promise<Bag> => {
+  if (!bagMap.has(filepath)) {
+    bagMap.set(filepath, open(filepath))
+  }
+  return await bagMap.get(filepath)!
 }
 
 server.app.use(
@@ -25,7 +27,7 @@ server.app.use(
     console.log('load topic', topic)
     const bag = await loadBag()
     const messages: ReadResult<any>[] = []
-    bag.readMessages({topics: [`/${topic}`]}, result => {
+    bag.readMessages({ topics: [`/${topic}`] }, result => {
       messages.push(result)
     })
     await delay(100)

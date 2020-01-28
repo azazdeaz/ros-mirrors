@@ -133,6 +133,7 @@ const html = (src: string) => `<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <title>title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/6.1.9/system.js"></script>
     <script type="module" src="${src}"></script>
   </head>
   <body>
