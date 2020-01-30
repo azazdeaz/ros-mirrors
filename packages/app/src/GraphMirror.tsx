@@ -84,7 +84,7 @@ const MyLine = ({ prop, messages, width, height }: MyLineProps) => {
   return <Line points={zip(x, y).flat() as number[]} stroke="lime" tension={1} />
 }
 
-export const Chart = ({ width, height }: Props) => {
+const GraphMirror = ({ width, height }: Props) => {
   // @ts-ignore
   const state = useAsync(async () => {
     const response = await fetch('http://localhost:8080/topic/tf')
@@ -98,7 +98,7 @@ export const Chart = ({ width, height }: Props) => {
 
     return messages
   })
-  console.log(state)
+
   return (
     <Stage width={width} height={height}>
       <Layer>
@@ -112,4 +112,9 @@ export const Chart = ({ width, height }: Props) => {
       </Layer>
     </Stage>
   )
+}
+
+export default {
+  renderMirror: () => <GraphMirror width={300} height={300}/>,
+  source: $our$,
 }

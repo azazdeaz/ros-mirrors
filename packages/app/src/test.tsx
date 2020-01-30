@@ -4,21 +4,13 @@ import { hot } from '/@hmr/api'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Comp } from './testcomp'
-import { Chart } from './Chart'
+import graphMirror from './GraphMirror'
 import { MirrorRoom, addMirror } from './MirrorRoom'
 import 'react'
 
-addMirror({
-  renderMirror: () => <Chart width={300} height={300} />,
-})
+addMirror(graphMirror)
 
-setTimeout(
-  () =>
-    addMirror({
-      renderMirror: () => <Chart width={300} height={300} />,
-    }),
-  1000,
-)
+setTimeout(() => addMirror(graphMirror), 1000)
 
 // @ts-ignore
 const elRoot = document.querySelector('#react-root')

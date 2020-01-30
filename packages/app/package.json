@@ -21,6 +21,7 @@
   "dependencies": {
     "@babel/core": "^7.8.3",
     "@jspm/resolve": "^1.0.0",
+    "@monaco-editor/react": "^3.0.1",
     "@types/react": "^16.9.19",
     "babel-plugin-conditional-compile": "^0.0.5",
     "babel-plugin-transform-cjs-dew": "^1.0.2",
@@ -32,6 +33,7 @@
     "koa-route": "^3.2.0",
     "konva": "^4.1.2",
     "lodash": "^4.17.15",
+    "monaco-editor": "^0.19.3",
     "node-fetch": "^2.6.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
