@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "start": "ts-node src/main.ts --project tsconfig.json",
+    "start": "nodemon --watch 'src/nodejs/**/*.ts' --exec 'ts-node' src/nodejs/main.ts",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
@@ -65,8 +65,10 @@
     "acorn": "^7.1.0",
     "acorn-dynamic-import": "^4.0.0",
     "acorn-import-meta": "^1.0.0",
+    "nodemon": "^2.0.2",
     "react-use": "^13.22.2",
     "rollup": "^1.30.1",
+    "rollup-plugin-livereload": "^1.0.4",
     "typescript": "^3.7.5"
   }
 }

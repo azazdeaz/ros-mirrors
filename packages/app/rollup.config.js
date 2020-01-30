@@ -2,15 +2,16 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import replace from '@rollup/plugin-replace'
 import typescript from '@rollup/plugin-typescript'
+import livereload from 'rollup-plugin-livereload'
 import ts from 'typescript'
 
 export default {
-  input: `src/test.tsx`,
-  output: [{ file: 'public/build.js', format: 'iife', sourcemap: true }],
+  input: `src/browser/test.tsx`,
+  output: [{ file: 'dist/build.js', format: 'iife', sourcemap: true }],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: [],
   watch: {
-    include: 'src/**',
+    include: 'src/browser/**',
   },
   plugins: [
     replace({
@@ -47,5 +48,7 @@ export default {
 
     // Resolve source maps to the original source
     // sourceMaps(),
+
+    livereload(),
   ],
 }

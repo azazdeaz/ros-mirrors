@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BehaviorSubject } from 'rxjs'
-import Editor from '../node_modules/@monaco-editor/react'
+// import Editor from '../node_modules/@monaco-editor/react'
 
 type Mirror = {
   renderMirror: () => JSX.Element
@@ -23,7 +23,7 @@ export const MirrorRoom = () => {
   console.log({ mirrors })
   return (
     <div>
-      <Editor height="90vh" language="javascript" />
+      {/* <Editor height="90vh" language="javascript" /> */}
       {mirrors?.map((mirror, i) => (
         <div key={i}>{mirror.renderMirror()}</div>
       ))}

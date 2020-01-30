@@ -15,7 +15,7 @@ const elRoot = document.querySelector('#react-root')
 
 const App = () => (
   <div>
-    aaaaa
+    cccccd
     <Comp />
     <MirrorRoom />
   </div>
@@ -24,5 +24,5 @@ const App = () => (
 ReactDOM.render(App(), elRoot)
 test()
 
-console.log('test1')
+console.log('test111!231')
 test()
