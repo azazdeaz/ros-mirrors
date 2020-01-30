@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import rk from 'react-konva'
 import Konva from 'konva'
 import range from 'lodash/range'
 import get from 'lodash/get'
 import zip from 'lodash/zip'
-import reactUse from 'react-use'
-import { Observable } from 'rxjs'
-const { Stage, Layer, Rect, Text, Line } = rk
-const { useAsync } = reactUse
+import { Stage, Layer, Rect, Text, Line } from 'react-konva'
+import { useAsync } from 'react-use'
 
 class ColoredRect extends React.Component {
   state = {
@@ -116,5 +113,5 @@ const GraphMirror = ({ width, height }: Props) => {
 
 export default {
   renderMirror: () => <GraphMirror width={300} height={300}/>,
-  source: $our$,
+  source: '$our$',
 }

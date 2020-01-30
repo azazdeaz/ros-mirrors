@@ -1,7 +1,5 @@
-import React from 'react'
-const { useState, useEffect } = React
-import rxjs from 'rxjs'
-const { BehaviorSubject } = rxjs
+import React, { useState, useEffect } from 'react'
+import { BehaviorSubject } from 'rxjs'
 import Editor from '../node_modules/@monaco-editor/react'
 
 type Mirror = {

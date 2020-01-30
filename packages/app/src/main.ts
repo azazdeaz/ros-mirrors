@@ -1,13 +1,15 @@
-import { createWebPort } from './createWebPort'
+import { start } from './createWebPort2'
 import { join } from 'path'
 import { open, Bag, ReadResult } from 'rosbag'
 import delay from 'delay'
 import route from 'koa-route'
 
-const { server } = createWebPort({
-  main: './src/test',
-  basedir: join(__dirname, '..'),
-})
+// const { server } = createWebPort({
+//   main: './dist/build.js',
+//   basedir: join(__dirname, '..'),
+// })
+
+start()
 
 // open('./bags/example.bag').then(bag => console.log(bag))
 
@@ -21,19 +23,19 @@ const loadBag = async (
   return await bagMap.get(filepath)!
 }
 
-server.app.use(
-  // @ts-ignore
-  route.get('/topic/:topic', async (ctx, topic) => {
-    console.log('load topic', topic)
-    const bag = await loadBag()
-    const messages: ReadResult<any>[] = []
-    bag.readMessages({ topics: [`/${topic}`] }, result => {
-      messages.push(result)
-    })
-    await delay(100)
-    ctx.body = JSON.stringify(messages)
-  }),
-)
+// server.app.use(
+//   // @ts-ignore
+//   route.get('/topic/:topic', async (ctx, topic) => {
+//     console.log('load topic', topic)
+//     const bag = await loadBag()
+//     const messages: ReadResult<any>[] = []
+//     bag.readMessages({ topics: [`/${topic}`] }, result => {
+//       messages.push(result)
+//     })
+//     await delay(100)
+//     ctx.body = JSON.stringify(messages)
+//   }),
+// )
 
 async function logMessagesFromFooBar() {
   // open a new bag at a given file location:

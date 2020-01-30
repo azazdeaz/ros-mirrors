@@ -10,8 +10,3 @@ export function test2(): void {
 }
 
 console.log('im running7'+0.27241241604895294)
-
-// @ts-ignore
-console.log($our$)
-// @ts-ignore
-window['test$our$'] = $our$ 
