@@ -1,6 +1,7 @@
 import express from 'express'
 import * as http from 'http'
 import * as WebSocket from 'ws'
+import { wsHandler as rosBagWSHandler } from './rosBag'
 
 export function start() {
   const app = express()
@@ -15,14 +16,20 @@ export function start() {
 
   wss.on('connection', (ws: WebSocket) => {
     //connection is up, let's add a simple simple event
+    let i = 0
+    setInterval(() => ws.send(JSON.stringify({msg: i++})), 4000)
     ws.on('message', (message: string) => {
       //log the received message and send it back to the client
       console.log('received: %s', message)
-      ws.send(`Hello, you sent -> ${message}`)
+      try {
+        rosBagWSHandler(JSON.parse(message), ws)
+      } catch (e) {
+        console.error(`Cound't process message - ${e.message}`)
+      }
     })
 
     //send immediatly a feedback to the incoming connection
-    ws.send('Hi there, I am a WebSocket server')
+    // ws.send('Hi there, I am a WebSocket server')
   })
 
   //start our server
@@ -30,7 +37,6 @@ export function start() {
     console.log(`Server started on port 8080 :)`)
   })
 }
-
 
 // @fount(() => notify())
 // const x = y => y ** 2

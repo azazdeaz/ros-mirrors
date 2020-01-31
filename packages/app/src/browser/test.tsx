@@ -26,3 +26,16 @@ test()
 
 console.log('test111!231')
 test()
+
+
+
+import { webSocket } from "rxjs/webSocket";
+const subject = webSocket('ws://localhost:8080');
+ 
+subject.subscribe();
+// Note that at least one consumer has to subscribe to the created subject - otherwise "nexted" values will be just buffered and not sent,
+// since no connection was established!
+// @ts-ignore
+ window.webs = webSocket
+subject.next({message: 'some message'});
+// This will send a message to the server once a connection is made. Remember value is serialized with JSON.stringify by default!

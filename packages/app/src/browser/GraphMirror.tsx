@@ -4,7 +4,7 @@ import range from 'lodash/range'
 import get from 'lodash/get'
 import zip from 'lodash/zip'
 import { Stage, Layer, Rect, Text, Line } from 'react-konva'
-import { useAsync } from 'react-use'
+import { useTopic } from './useTopic'
 
 class ColoredRect extends React.Component {
   state = {
@@ -82,27 +82,14 @@ const MyLine = ({ prop, messages, width, height }: MyLineProps) => {
 }
 
 const GraphMirror = ({ width, height }: Props) => {
-  // @ts-ignore
-  const state = useAsync(async () => {
-    const response = await fetch('http://localhost:8080/topic/tf')
-    const text = await response.text()
-    const messages = (JSON.parse(text) as any[])
-      .map(msg => ({
-        time: msg.timestamp.sec + msg.timestamp.nsec / 10 ** 8,
-        transform: msg.message.transforms[0].transform,
-      }))
-      .sort((a, b) => a.time - b.time)
-
-    return messages
-  })
-
+  const messages = useTopic('/tf')
   return (
     <Stage width={width} height={height}>
       <Layer>
         <Rect x={0} y={0} width={width} height={height} fill={'black'} />
         <MyLine
           prop="transform.rotation.z"
-          messages={state.value}
+          messages={messages}
           width={width}
           height={height}
         />

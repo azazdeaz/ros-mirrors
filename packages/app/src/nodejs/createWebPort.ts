@@ -1,4 +1,4 @@
-import { Server } from '../node_modules/heiss/lib/server/server'
+import { Server } from 'heiss/lib/server/server'
 import route from 'koa-route'
 import { dirname, relative } from 'path'
 import fs from 'fs-extra'

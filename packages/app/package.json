@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsc --build",
     "start": "nodemon --watch 'src/nodejs/**/*.ts' --exec 'ts-node' src/nodejs/main.ts",
+    "watch": "rollup -c -w",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
