@@ -88,7 +88,7 @@ const GraphMirror = ({ width, height }: Props) => {
       <Layer>
         <Rect x={0} y={0} width={width} height={height} fill={'black'} />
         <MyLine
-          prop="transform.rotation.z"
+          prop="transform.translation.x"
           messages={messages}
           width={width}
           height={height}
