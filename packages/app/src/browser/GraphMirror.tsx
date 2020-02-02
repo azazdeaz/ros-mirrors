@@ -69,6 +69,7 @@ const MyLine = ({ prop, messages, width, height }: MyLineProps) => {
 
 const GraphMirror = ({ width, height, values }: Props) => {
   const messages = useTopic('/tf')
+  console.log('render GM', width, height)
   return (
     <Stage width={width} height={height}>
       <Layer>
@@ -88,5 +89,5 @@ const GraphMirror = ({ width, height, values }: Props) => {
 }
 
 export const create = (props: Props) => ({
-  renderMirror: () => <GraphMirror {...props} />,
+  renderMirror: (props2: Partial<Props>) => <GraphMirror {...{...props, ...props2}} />,
 })
