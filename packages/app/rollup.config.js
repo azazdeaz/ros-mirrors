@@ -4,10 +4,11 @@ import replace from '@rollup/plugin-replace'
 import typescript from '@rollup/plugin-typescript'
 import sucrase from '@rollup/plugin-sucrase'
 import livereload from 'rollup-plugin-livereload'
+import del from 'rollup-plugin-delete'
 import ts from 'typescript'
 
 export default {
-  input: `src/browser/test.tsx`,
+  input: `src/browser/main.tsx`,
   output: [{ dir: 'dist', format: 'es', sourcemap: true }],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: [],
@@ -16,6 +17,7 @@ export default {
   },
   treeshake: true,
   plugins: [
+    del({ targets: 'dist/*' }),
     replace({
       'process.env.NODE_ENV': `'development'`,
     }),

@@ -1,13 +1,16 @@
-
 // @ts-ignore1
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Comp } from './testcomp'
-import graphMirror from './GraphMirror'
+import { create as createGraphMirror } from './GraphMirror'
 import { MirrorRoom, addMirror } from './MirrorRoom'
-addMirror(graphMirror)
-
-setTimeout(() => addMirror(graphMirror), 1000)
+addMirror(
+  createGraphMirror({
+    values: ['transform.translation.x', 'transform.rotation.z'],
+    width: 300,
+    height: 300,
+  }),
+)
 
 // @ts-ignore
 const elRoot = document.querySelector('#react-root')

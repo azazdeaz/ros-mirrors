@@ -1,38 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component, useRef } from 'react'
 import Konva from 'konva'
 import range from 'lodash/range'
 import get from 'lodash/get'
 import zip from 'lodash/zip'
 import { Stage, Layer, Rect, Text, Line } from 'react-konva'
 import { useTopic } from './useTopic'
-
-class ColoredRect extends React.Component {
-  state = {
-    color: 'green',
-  }
-  handleClick = () => {
-    this.setState({
-      color: Konva.Util.getRandomColor(),
-    })
-  }
-  render() {
-    return (
-      <Rect
-        x={20}
-        y={20}
-        width={50}
-        height={50}
-        fill={this.state.color}
-        shadowBlur={5}
-        onClick={this.handleClick}
-      />
-    )
-  }
-}
+import color from 'color'
 
 type Props = {
   width: number
   height: number
+  values: string[]
 }
 
 const getPoints = (width = 100, height = 100): number[] => {
@@ -69,6 +47,8 @@ const normarr = (values: number[], scale: number) => {
 }
 
 const MyLine = ({ prop, messages, width, height }: MyLineProps) => {
+  const { current: strokeColor} = useRef(Konva.Util.getRandomColor())
+
   if (!messages) {
     return null
   }
@@ -76,29 +56,37 @@ const MyLine = ({ prop, messages, width, height }: MyLineProps) => {
     messages.map(m => m.time),
     width,
   )
-  const y =normarr(messages.map(m => get(m, prop)) as number[], height)
+  const y = normarr(messages.map(m => get(m, prop)) as number[], height)
 
-  return <Line points={zip(x, y).flat() as number[]} stroke="lime" tension={1} />
+  return (
+    <Line
+      points={zip(x, y).flat() as number[]}
+      stroke={color(strokeColor).fade(0.1).string()}
+      tension={1}
+    />
+  )
 }
 
-const GraphMirror = ({ width, height }: Props) => {
+const GraphMirror = ({ width, height, values }: Props) => {
   const messages = useTopic('/tf')
   return (
     <Stage width={width} height={height}>
       <Layer>
         <Rect x={0} y={0} width={width} height={height} fill={'black'} />
-        <MyLine
-          prop="transform.translation.x"
-          messages={messages}
-          width={width}
-          height={height}
-        />
+        {values.map(value => (
+          <MyLine
+            key={value}
+            prop={value}
+            messages={messages}
+            width={width}
+            height={height}
+          />
+        ))}
       </Layer>
     </Stage>
   )
 }
 
-export default {
-  renderMirror: () => <GraphMirror width={300} height={300}/>,
-  source: '$our$',
-}
+export const create = (props: Props) => ({
+  renderMirror: () => <GraphMirror {...props} />,
+})
