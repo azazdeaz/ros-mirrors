@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react'
+import React, { Component, useRef, FC, useContext } from 'react'
 import Konva from 'konva'
 import range from 'lodash/range'
 import get from 'lodash/get'
@@ -6,10 +6,10 @@ import zip from 'lodash/zip'
 import { Stage, Layer, Rect, Text, Line } from 'react-konva'
 import { useTopic } from './useTopic'
 import color from 'color'
-
+import { ParentSizeContext } from './ParentSize'
+import { ros } from './ros'
+console.log(ros)
 type Props = {
-  width: number
-  height: number
   values: string[]
 }
 
@@ -67,9 +67,9 @@ const MyLine = ({ prop, messages, width, height }: MyLineProps) => {
   )
 }
 
-const GraphMirror = ({ width, height, values }: Props) => {
+const GraphMirror: FC<Props> = ({ values }) => {
+  const {width, height} = useContext(ParentSizeContext)
   const messages = useTopic('/tf')
-  console.log('render GM', width, height)
   return (
     <Stage width={width} height={height}>
       <Layer>
@@ -88,6 +88,4 @@ const GraphMirror = ({ width, height, values }: Props) => {
   )
 }
 
-export const create = (props: Props) => ({
-  renderMirror: (props2: Partial<Props>) => <GraphMirror {...{...props, ...props2}} />,
-})
+export const create = (props: Props) => () => <GraphMirror {...props} />

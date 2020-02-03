@@ -17,7 +17,7 @@ export default {
   },
   treeshake: true,
   plugins: [
-    del({ targets: 'dist/*' }),
+    del({ targets: 'dist/*', runOnce: true }),
     replace({
       'process.env.NODE_ENV': `'development'`,
     }),

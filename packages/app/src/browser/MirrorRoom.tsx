@@ -4,9 +4,11 @@ import { MirrorFrame } from './MirrorFrame'
 // import Editor from '@monaco-editor/react'
 
 type Mirror = {
-  renderMirror: () => ReactElement
+  renderContent: () => ReactElement
   x?: number
   y?: number
+  width?: number
+  height?: number
 }
 
 const mirrors$ = new BehaviorSubject([] as Mirror[])
@@ -26,7 +28,12 @@ export const MirrorRoom = () => {
     <div>
       {/* <Editor height="90vh" language="javascript" /> */}
       {mirrors?.map((mirror, i) => (
-        <MirrorFrame key={i} renderContent={mirror.renderMirror} />
+        <MirrorFrame key={i} renderContent={mirror.renderContent} initialState={{
+          x: mirror.x || 0,
+          y: mirror.y || 0,
+          width: mirror.width || 300,
+          height: mirror.height || 300,
+        }} />
       ))}
     </div>
   )

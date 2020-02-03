@@ -4,13 +4,35 @@ import ReactDOM from 'react-dom'
 import { Comp } from './testcomp'
 import { create as createGraphMirror } from './GraphMirror'
 import { MirrorRoom, addMirror } from './MirrorRoom'
-addMirror(
-  createGraphMirror({
-    values: ['transform.translation.x', 'transform.rotation.z'],
+import ROS from 'roslib'
+
+import('./GraphMirror').then(({ create }) =>
+  addMirror({
+    renderContent: create({
+      values: ['transform.translation.x', 'transform.rotation.z'],
+    }),
+    x: 0,
+    y: 0,
     width: 300,
     height: 300,
   }),
 )
+
+import('./Camera').then(({ create }) =>
+  addMirror({
+    renderContent: create({
+      topicName: '/camera/rgb/image_raw',
+    }),
+    x: 0,
+    y: 300,
+    width: 300,
+    height: 300,
+  }),
+)
+
+console.log({ ROS })
+// @ts-ignore
+window['ROS'] = ROS
 
 // @ts-ignore
 const elRoot = document.querySelector('#react-root')
