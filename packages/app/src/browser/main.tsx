@@ -25,8 +25,8 @@ import('./Camera').then(({ create }) =>
     }),
     x: 0,
     y: 300,
-    width: 300,
-    height: 300,
+    width: 640,
+    height: 480,
   }),
 )
 
