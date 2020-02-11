@@ -11,5 +11,10 @@ export const createTopicObservable = (name: string) => {
   return sub
 }
 
+export const createTopic = (name: string) => {
+  // @ts-ignore
+  return new ROS.Topic({ ros, name })
+}
+
 // @ts-ignore
 window['rc'] = ros

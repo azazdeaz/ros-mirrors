@@ -30,6 +30,18 @@ import('./Camera').then(({ create }) =>
   }),
 )
 
+import('./Teleop').then(({ create }) =>
+  addMirror({
+    renderContent: create({
+      topicName: '/camera/rgb/image_raw',
+    }),
+    x: 300,
+    y: 0,
+    width: 200,
+    height: 200,
+  }),
+)
+
 console.log({ ROS })
 // @ts-ignore
 window['ROS'] = ROS
