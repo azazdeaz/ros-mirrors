@@ -2,6 +2,13 @@ import express from 'express'
 import * as http from 'http'
 import * as WebSocket from 'ws'
 import { wsHandler as rosBagWSHandler } from './rosBag'
+import { run } from './roscli'
+
+const tryJsonParse = (json: string) => {
+  try {
+    return JSON.parse(json)
+  } catch (_) {}
+}
 
 export function start() {
   const app = express()
@@ -15,16 +22,17 @@ export function start() {
   const wss = new WebSocket.Server({ server })
 
   wss.on('connection', (ws: WebSocket) => {
-    //connection is up, let's add a simple simple event
-    let i = 0
-    setInterval(() => ws.send(JSON.stringify({msg: i++})), 4000)
-    ws.on('message', (message: string) => {
+    ws.on('message', (incoming: string) => {
       //log the received message and send it back to the client
-      console.log('received: %s', message)
-      try {
-        rosBagWSHandler(JSON.parse(message), ws)
-      } catch (e) {
-        console.error(`Cound't process message - ${e.message}`)
+      console.log('received: %s', incoming)
+      const message = tryJsonParse(incoming)
+      if (!message) {
+        return
+      }
+      if (message.type === 'roscli') {
+        const kill = run(message.cmd).subscribe(next => {
+          ws.send(JSON.stringify({ requestID: message.requestID || null, std: next }))
+        })
       }
     })
 
