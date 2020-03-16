@@ -1,4 +1,4 @@
-// @ts-ignore1
+// @ts-ignore
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Comp } from './testcomp'
@@ -6,17 +6,17 @@ import { create as createGraphMirror } from './GraphMirror'
 import { MirrorRoom, addMirror } from './MirrorRoom'
 import ROS from 'roslib'
 
-import('./GraphMirror').then(({ create }) =>
-  addMirror({
-    renderContent: create({
-      values: ['transform.translation.x', 'transform.rotation.z'],
-    }),
-    x: 0,
-    y: 0,
-    width: 300,
-    height: 300,
-  }),
-)
+// import('./GraphMirror').then(({ create }) =>
+//   addMirror({
+//     renderContent: create({
+//       values: ['transform.translation.x', 'transform.rotation.z'],
+//     }),
+//     x: 0,
+//     y: 0,
+//     width: 300,
+//     height: 300,
+//   }),
+// )
 
 import('./Camera').then(({ create }) =>
   addMirror({

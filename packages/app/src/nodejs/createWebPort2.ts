@@ -3,6 +3,8 @@ import * as http from 'http'
 import * as WebSocket from 'ws'
 import { wsHandler as rosBagWSHandler } from './rosBag'
 import { run } from './roscli'
+import { startServer } from './servers/startServer'
+startServer()
 
 const tryJsonParse = (json: string) => {
   try {
@@ -41,8 +43,8 @@ export function start() {
   })
 
   //start our server
-  server.listen(process.env.PORT || 8080, () => {
-    console.log(`Server started on port 8080 :)`)
+  server.listen(process.env.PORT || 3232, () => {
+    console.log(`Server started on port 3232 :)`)
   })
 }
 

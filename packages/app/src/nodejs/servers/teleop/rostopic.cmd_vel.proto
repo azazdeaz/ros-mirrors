@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package rostopic;
+
+service CmdVelTopic {
+  // unary call
+  rpc publish(Twist) returns (Empty);
+  // server streaming call
+  rpc subscribe(Empty) returns (stream Twist);
+}
+
+message Twist {
+  message Vector3 {
+    double x = 1;
+    double y = 2;
+    double z = 3;
+  }
+  Vector3 linear = 1;
+  Vector3 angular = 2;
+}
+
+message Empty {}
+       

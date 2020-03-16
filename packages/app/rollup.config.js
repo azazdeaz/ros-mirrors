@@ -9,6 +9,7 @@ import ts from 'typescript'
 
 export default {
   input: `src/browser/main.tsx`,
+  // input: 'src/browser/grpc/client.ts',
   output: [{ dir: 'dist', format: 'es', sourcemap: true }],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: [],

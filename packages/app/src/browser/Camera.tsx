@@ -2,7 +2,18 @@ import React, { Component, useRef, FC, useEffect, useContext } from 'react'
 import { useTopic } from './useTopic'
 import color from 'color'
 import { ParentSizeContext } from './ParentSize'
-import { createTopicObservable } from './ros'
+
+import _web from '../nodejs/servers/image/stubs/rostopic.image_grpc_web_pb'
+const { ImageTopicClient } = _web
+import _types from '../nodejs/servers/image/stubs/rostopic.image_pb'
+const { Image, Empty } = _types
+var client = new ImageTopicClient(
+    'http://' + window.location.hostname + ':8080',
+    null,
+    null,
+  )
+  // @ts-ignore
+;(window.__GRPCWEB_DEVTOOLS__ || (() => {}))([client])
 
 type Props = {
   topicName: string
@@ -45,20 +56,25 @@ const isSensorMsgs_Image = (msg: any): msg is SensorMsgs_Image => {
     typeof msg.height === 'number'
   )
 }
-
+let __r = 0
 const Camera: FC<Props> = ({ topicName }) => {
   const { width, height } = useContext(ParentSizeContext)
   const canvas = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
-    createTopicObservable(topicName).subscribe(message => {
-      if (!canvas.current || !isSensorMsgs_Image(message)) {
+    client.subscribe(new Empty()).on('data', (message => {
+      if (!canvas.current) {
         return
       }
-      const ctx = canvas.current.getContext('2d')!
-      const imageData = new ImageData(message.width, message.height)
-      rgb2rgba(message.data, message.width, message.height, imageData.data)
-      ctx.putImageData(imageData, 0, 0)
-    })
+      if (++__r % 1 === 0) {
+        console.time('render pb')
+        const ctx = canvas.current.getContext('2d')!
+        const imageData = new ImageData(message.getWidth(), message.getHeight())
+        rgb2rgba(message.getData() as Uint8Array, message.getWidth(), message.getHeight(), imageData.data)
+        ctx.putImageData(imageData, 0, 0)
+        console.timeEnd('render pb')
+      }
+    }))
+
   }, [])
   return <canvas ref={canvas} width={width} height={height} />
 }
